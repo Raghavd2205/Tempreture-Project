@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    width: 100%;
+    height: 100%;
+    
+   
+
+}
+#main{
+    position: absolute;
+    top :35%;
+    left : 40%;
+    height : 45%;
+    width: 15%;
+    background-color: black;
+    
+}
+#icon{
+    position: absolute;
+    
+    height:40%;
+    width: 100%;
+    
+}
+#half{
+    position: absolute;
+    top :40%;
+    opacity: 70%;
+    height : 60%;
+    width: 100%;
+    background-color: rgb(102, 255, 0);
+    border-top-left-radius : 40%;
+    border-top-right-radius : 40%;
+   
+}
+#kt{
+    position: absolute;
+    top :18%;
+    left : 23%;
+    color : rgba(10, 10, 10, 0.712);
+    font-weight: bolder;
+    font-size: larger;
+}
+#date{
+    position: absolute;
+    top :43%;
+    left : 17%;
+    color : rgba(10, 10, 10, 0.712);
+    font-weight: bolder;
+}
+#tem{
+    position: absolute;
+    top :63%;
+    left : 35%;
+    color : rgba(10, 10, 10, 0.712);
+    font-weight: bolder;
+
+
+}
+ 
+#tem2{
+    position: absolute;
+    top :83%;
+    left : 15%;
+    color : rgba(10, 10, 10, 0.712);
+    font-weight: bolder;
+    font-size: smaller;
+
+    
+
+}
+#icon i{
+    position: absolute;
+    top : 10%;
+    left : 10%;
+    height : 10%;
+    width : 10%;
+}
+#txt{
+    position: absolute;
+    border-style: none;
+    background-color: rgb(102, 255, 0);
+    width: 100%;
+    height: 10%;
+    
+}
+#submit1{
+    position: absolute;
+    border-style: none;
+    top : 20%;
+    left : 35%;
+    height: 10%;
+    width : 30%;
+    background-color: rgb(102, 255, 0) ;
+}
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <div id="main">
+        <form action="/app.js"> 
+            <input type="text" id="txt" placeholder="Type City Name to find Weather" value="Katni">
+            <input type="submit" id="submit1">
+        </form>
+       
+            
+       
+        <div id = "half">
+            <h1 id="kt">Katni IN</h1>
+            <p1 id="date">Wed|Apr 29|10:40AM</p1>
+            <h2 id="tem">37°C</h2>
+            <h3 id="tem2"> Min 35°C | Max 40°C</h3>
+        </div>
+        
+    </div>
+
+    <script>
+        var currdate = document.getElementById("date");
+        var curricon = document.getElementById("icon");
+        var txtt = document.getElementById("txt");
+        var sbmt = document.getElementById("submit1");
+        var tema = document.getElementById("tem");
+        var kta = document.getElementById("kt");
+        var temp2a = document.getElementById("tem2");
+        console.log(txtt.value);
+       
+        const getqu = async() =>{
+            let cityname = txtt.value;
+            console.log(cityname);
+            
+    
+            try{
+                const api = `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&units=metric&appid=f9a7c146f0b9831507f94ae69a5c25e7`;
+                const data = await fetch(api);
+                 const realdata = await data.json();
+                    const xx = [realdata]
+                 console.log(xx[0]);
+                kta.innerText =  `${xx[0].name},${xx[0].sys.country}`;
+                tema.innerText =  `${xx[0].main.temp}°C` ; 
+                temp2a.innerText =  `Min ${xx[0].main.temp_min} | Max ${xx[0].main.temp_max}`;
+            }
+            catch(error){}
+        }
+        getqu();
+        sbmt.addEventListener("click",getqu);
+        
+        const getcurrentDay = () =>{
+            var day = [
+                "Sun",
+                "Mon",
+                "Tue",
+                "Wed",
+                "Thr",
+                "Fri",
+                "Sat",
+                
+            ];
+            var now = new Date();
+            var dday = (day[now.getDay()]);
+            return dday;
+        } 
+        const getcurrentMon = ()=>{
+            var month = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+            ]
+            var now1 = new Date();
+            var mon = month[now1.getMonth()];
+            var dat = now1.getDate();
+            var abd = `${mon} ${dat}`;
+            console.log(abd);
+            return abd;
+        }
+        
+        const getcurrentTime = ()=>{
+            var now2 = new Date();
+            var hr = now2.getHours();
+            var min = now2.getMinutes();
+            var sa = "AM";
+
+            if(hr>11){
+                sa = "PM";
+                if(hr>12){
+                    hr = hr-12;
+                }
+            }
+            if(min<10){
+                var ddp = `${hr}:0${min}${sa}`
+            }
+            else{
+                var ddp = `${hr}:${min}${sa}`
+            }
+            
+            console.log(ddp);
+            return ddp;
+        }
+        setInterval(()=>{
+        currdate.innerText = getcurrentDay() +"|"+ getcurrentMon() +"|"+ getcurrentTime();
+
+    
+        },1000);
+
+
+    </script>
+</body>
+</html>
